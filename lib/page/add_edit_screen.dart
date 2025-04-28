@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:notefix/model/notes_model.dart';
 import 'package:notefix/page/home_screen.dart';
@@ -5,13 +7,14 @@ import 'package:notefix/sevice/database_helper.dart';
 
 class AddEditNoteScreen extends StatefulWidget {
   final Note? note;
-  const AddEditNoteScreen({this.note});
+  const AddEditNoteScreen({super.key, this.note});
 
   @override
   State<AddEditNoteScreen> createState() => _AddEditNoteScreenState();
 }
 
 class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
+  
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
@@ -29,7 +32,6 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if(widget.note != null) {
       _titleController.text = widget.note!.title;
@@ -109,15 +111,21 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
                               ), 
                             ),
                           );
-                        }).toList()
+                        }
+                      ).toList()
                       ),
-                    ),)
-                ],
-              ),
-            ),
+                    ),
+                  ),
+//                  ElevatedButton(
+//   onPressed: () async {
+//     await _databaseHelper.resetDatabase();
+//     setState(() {}); // Refresh tampilan
+//   },
+//   child: Text('Reset Database'),
+// ),
             InkWell(
               onTap: (){
-                _saveNote;
+                _saveNote();
                 Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
               },
               child: Container(
@@ -138,6 +146,9 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
                 ),
               ),
             )
+                ],
+              ),
+            ),
           ],
         )),
     );
@@ -149,14 +160,14 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
         id: widget.note?.id,
         title: _titleController.text,
         content: _contentController.text,
-        color: _selectedColor.toString(),
+        color: _selectedColor.value.toString(),
         dateTime: DateTime.now().toString()
       );
 
       if(widget.note == null){
         await _databaseHelper.insertNote(note);
       } else {
-        await _databaseHelper.insertNote(note);
+        await _databaseHelper.updateNote(note);
       }
     }
   }

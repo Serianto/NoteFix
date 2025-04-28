@@ -1,5 +1,8 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:notefix/model/notes_model.dart';
+import 'package:notefix/page/add_edit_screen.dart';
 //import 'package:notefix/page/add_edit_screen.dart';
 import 'package:notefix/sevice/database_helper.dart';
 
@@ -14,9 +17,9 @@ class ViewNoteScreen extends StatelessWidget {
     final now = DateTime.now();
 
     if(dt.year == now.year && dt.month == now.month && dt.day == now.day) {
-      return 'Today, ${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(0,'0')}';
+      return '${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(2,'0')}';
     }
-    return '${dt.day}/${dt.month}/${dt.year}/, ${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(0,'0')}';
+    return '${dt.day}/${dt.month}/${dt.year}/, ${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(2,'0')}';
   }
 
   @override
@@ -32,6 +35,15 @@ class ViewNoteScreen extends StatelessWidget {
             onPressed: () => _showDeleteDialog(context), 
             icon: Icon(
               Icons.delete,
+              color: Colors.white,
+            )
+          ),
+          IconButton(
+            onPressed: () async {
+              await Navigator.push(context, MaterialPageRoute(builder: (context) => AddEditNoteScreen(note: note)));
+            }, 
+            icon: Icon(
+              Icons.edit,
               color: Colors.white,
             )
           ),

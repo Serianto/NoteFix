@@ -18,7 +18,7 @@ class Note{
       'id': id,
       'title': title,
       'content': content,
-      'colot': color,
+      'color': color,
       'dateTime': dateTime
     };
   }

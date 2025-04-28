@@ -58,4 +58,10 @@ class DatabaseHelper {
     where: 'id = ?',
     whereArgs: [id]);
   }
+
+  Future<void> resetDatabase() async {
+    final db = await database;
+    await db.execute('DROP TABLE IF EXISTS notes');
+    await _onCreate(db, 1);
+}
 }

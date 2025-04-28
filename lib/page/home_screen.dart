@@ -15,19 +15,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final DatabaseHelper _databaseHelper = DatabaseHelper();
   List<Note> _notes = [];
-  // final List<Color> _noteColors = [
-  //   Colors.amber,
-  //   Color(0xFF50C878),
-  //   Colors.redAccent,
-  //   Colors.blueAccent,
-  //   Colors.indigo,
-  //   Colors.purpleAccent,
-  //   Colors.pinkAccent
-  // ];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadNotes();
   }
@@ -44,9 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final now = DateTime.now();
 
     if(dt.year == now.year && dt.month == now.month && dt.day == now.day) {
-      return 'Today, ${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(0,'0')}';
+      return '${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(2,'0')}';
     }
-    return '${dt.day}/${dt.month}/${dt.year}/, ${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(0,'0')}';
+    return '${dt.day}/${dt.month}/${dt.year}/, ${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(2,'0')}';
   }
   @override
   Widget build(BuildContext context) {
@@ -68,7 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: _notes.length,
         itemBuilder: (context, index) {
           final note = _notes[index];
-          final color = Color(int.parse(note.color));
+            Color color;
+              try {
+                color = Color(int.parse(note.color));
+              } catch (e) {
+                color = Colors.amber; // fallback color
+              }
+          //final color = Color(int.parse(note.color));
 
           return GestureDetector(
             onTap: () async {
@@ -81,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
+                    // ignore: deprecated_member_use
                     color: Colors.black.withOpacity(0.1),
                     blurRadius: 4,
                     offset: Offset(0, 2),
@@ -128,9 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(onPressed:() async {
         await Navigator.push(context, MaterialPageRoute(builder: (context) => AddEditNoteScreen()));
       },
-      child: Icon(Icons.add),
       backgroundColor: Color(0xFF50C878),
       foregroundColor: Colors.white,
+      child: Icon(Icons.add),
       ),
     );
   }
