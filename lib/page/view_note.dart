@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:notefix/model/notes_model.dart';
 import 'package:notefix/page/add_edit_screen.dart';
 //import 'package:notefix/page/add_edit_screen.dart';
@@ -12,15 +13,17 @@ class ViewNoteScreen extends StatelessWidget {
 
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
-  String _formatDateTime(String dateTime) {
-    final DateTime dt = DateTime.parse(dateTime);
-    final now = DateTime.now();
+String _formatDateTime(String dateTime) {
+  final DateTime dt = DateTime.parse(dateTime);
+  final now = DateTime.now();
+  final dayName = DateFormat.EEEE().format(dt);
 
-    if(dt.year == now.year && dt.month == now.month && dt.day == now.day) {
-      return '${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(2,'0')}';
-    }
-    return '${dt.day}/${dt.month}/${dt.year}/, ${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(2,'0')}';
+  if (dt.year == now.year && dt.month == now.month && dt.day == now.day) {
+    return '$dayName, ${dt.hour.toString().padLeft(2, '0')} : ${dt.minute.toString().padLeft(2, '0')}';
   }
+
+  return '$dayName, ${dt.day}/${dt.month}/${dt.year}, ${dt.hour.toString().padLeft(2, '0')} : ${dt.minute.toString().padLeft(2, '0')}';
+}
 
   @override
   Widget build(BuildContext context) {

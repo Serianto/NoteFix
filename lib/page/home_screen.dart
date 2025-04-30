@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:notefix/model/notes_model.dart';
 import 'package:notefix/page/add_edit_screen.dart';
 import 'package:notefix/page/view_note.dart';
 import 'package:notefix/sevice/database_helper.dart';
+import 'package:notefix/widgets/no_note.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,28 +30,39 @@ class _HomeScreenState extends State<HomeScreen> {
       _notes = notes;
     });
   }
-
+  
   String _formatDateTime(String dateTime) {
     final DateTime dt = DateTime.parse(dateTime);
     final now = DateTime.now();
+    final dayName = DateFormat.EEEE().format(dt);
 
-    if(dt.year == now.year && dt.month == now.month && dt.day == now.day) {
-      return '${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(2,'0')}';
+    if (dt.year == now.year && dt.month == now.month && dt.day == now.day) {
+      return '$dayName, ${dt.hour.toString().padLeft(2, '0')} : ${dt.minute.toString().padLeft(2, '0')}';
     }
-    return '${dt.day}/${dt.month}/${dt.year}/, ${dt.hour.toString().padLeft(2,'0')} : ${dt.minute.toString().padLeft(2,'0')}';
+
+    return '$dayName, ${dt.day}/${dt.month}/${dt.year}, ${dt.hour.toString().padLeft(2, '0')} : ${dt.minute.toString().padLeft(2, '0')}';
   }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0,
+        elevation: 2,
         backgroundColor: Colors.white,
+        centerTitle: true,
         title: Text(
           'Catatan',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
+        ),
       ),
-      body: GridView.builder(
+      body: _notes.isEmpty
+        ? Center(child: NoNotes())
+        : GridView.builder(
         padding: EdgeInsets.all(16),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
